@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>delaunay.js benchmark</title>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="//raw.github.com/spencerschack/delaunay.js/master/delaunay.js" type="text/javascript" charset="utf-8"></script>
+		<script>
+			$(document).ready(function() {
+				
+				function generatePoints(numberOfPoints) {
+					var points = [];
+					for(var i = 0, i < numberOfPoints; i++) {
+						points.push({
+							x: (Math.random() * 1000),
+							y: (Math.random() * 1000)
+						});
+					}
+					return points;
+				}
+				
+				function runBenchmark(numberOfPoints) {
+					var points    = generatePoints(numberOfPoints)
+					  , startTime = Date.now();
+					Delaunay(points);
+					var finishTime = Date.now();
+					$("#time").text((finishTime - startTime));
+				}
+				
+				$("#benchmark_form").submit(function(event) {
+					event.preventDefault();
+					var numberOfPoints = parseInt($(this).find("#number_of_points").val());
+					$(this).find(":submit").attr("disabled", true);
+					runBenchmark(numberOfPoints);
+					$(this).find(":submit").removeAttr("disabled");
+				});
+				
+			});
+		</script>
+	</head>
+	<form id="benchmark_form">
+		<label for="number_of_points">Number of Points</label>
+		<input type="text" id="number_of_points" />
+		<input type="submit" value="Run Benchmark" />
+	</form>
+	<p>
+		<b>Time:</b>
+		<span id="time"></span>
+	</p>
+</html>
